@@ -8,14 +8,18 @@ import {
 import CourseDetail from './components/CourseDetail';
 import Courses from './components/Courses';
 
+import withContext from './Context';
+const CoursesWithContext = withContext(Courses);
+const CourseDetailWithContext = withContext(CourseDetail);
+
 function App() {
 
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path='/' element={<Courses/>}/>
-          <Route path='/courses/:id' element={<CourseDetail/>} />
+          <Route path='/courses' element={<CoursesWithContext/>}/>
+          <Route path='/courses/:id' element={<CourseDetailWithContext/>} />
         </Routes>
       </Router>
     </div>

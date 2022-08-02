@@ -1,26 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const Context = React.createContext()
-let id = 0;
 
 export const Provider = (props) => {
-  const [courses, setCourses] = useState([]);
 
-  const someFunction = () => {
-    // some function
-  };
+    const [courses, setCourses] = useState([]);
+    // variable to keep track of when the courses needs to be updated (ie data needs to be fetched again)
+    const [courseChange, setCourseChange] = useState(0);
 
-
-  return (
-    <Context.Provider value={{ 
-      courses,
-      actions: {
+    const updateCourses = () => {
         
-      }
-    }}>
-      { props.children }
-    </Context.Provider>
-  );
+    };
+
+    const fetchData = () => {
+        fetch("http://localhost:5000/api/courses")
+        .then(res => res.json())
+        .then((data) => {
+                setCourses(data);
+            })
+    }
+
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/api/courses")
+    //         .then(res => res.json())
+    //         .then((data) => {
+    //                 setCourses(data);
+    //             })
+    // }, [courseChange])
+
+
+    return (
+        <Context.Provider value={{ 
+        courses,
+        actions: {
+            fetchData: fetchData
+        }
+        }}>
+        { props.children }
+        </Context.Provider>
+    );
 };
 
 export const Consumer = Context.Consumer;
