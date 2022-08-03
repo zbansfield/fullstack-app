@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Courses from "./Courses";
+import axios from 'axios';
 
 export default ({context}) => {
     const { id } = useParams();
+    // const [status, setStatus] = useState(false)
+    let status = false;
 
     useEffect(() => {
         context.actions.fetchData()
     }, [])
+
+    // Function for sending a delete request
+    const deletePostHandler = () => {
+        axios.delete('http://localhost:5000/api/courses/' + id)
+            .then(response => {
+                console.log(response);
+            });
+    }
 
     return (
         <main>
@@ -16,7 +26,7 @@ export default ({context}) => {
                     <a className="button" href={`/courses/${id}/update`}>
                         Update Course
                     </a>
-                    <a className="button" href="#">
+                    <a className="button" href="/" onClick={deletePostHandler}>
                         Delete Course
                     </a>
                     <a className="button button-secondary" href="/">

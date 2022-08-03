@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default ({context}) => {
+
+    const navigate = useNavigate();
 
     return (
         <main>
@@ -25,7 +28,7 @@ export default ({context}) => {
                     </button>
                     <button
                     className="button button-secondary"
-                    onclick=""
+                    onClick={() => navigate('/')}
                     >
                     Cancel
                     </button>

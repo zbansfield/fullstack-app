@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import Data from './Data';
 
 export const Context = React.createContext()
 
 export const Provider = (props) => {
 
     const [courses, setCourses] = useState([]);
-    // variable to keep track of when the courses needs to be updated (ie data needs to be fetched again)
-    const [courseChange, setCourseChange] = useState(0);
-
-    const updateCourses = () => {
-        
-    };
+    const cookie = Cookies.get('authenticatedUser')
+    const [authenticatedUser, setAuthenticatedUser] = useState(cookie ? JSON.parse(cookie) : null);
+    const data = new Data();
 
     const fetchData = () => {
         fetch("http://localhost:5000/api/courses")
@@ -20,20 +19,32 @@ export const Provider = (props) => {
             })
     }
 
-    // useEffect(() => {
-    //     fetch("http://localhost:5000/api/courses")
-    //         .then(res => res.json())
-    //         .then((data) => {
-    //                 setCourses(data);
-    //             })
-    // }, [courseChange])
+    const signIn = async (emailAddress, password) => {
+        const user = await data.getUser(emailAddress, password);
+        if (user !== null) {
+            setAuthenticatedUser(user)
+            const cookieOptions = {
+                expires: 1 // 1 day
+            };
+            Cookies.set('authenticatedUser', JSON.stringify(user), cookieOptions);
+        }
+        return user;
+    }
+
+    const signOut = async () => {
+        setAuthenticatedUser(null)
+        Cookies.remove('authenticatedUser');
+    }
 
 
     return (
         <Context.Provider value={{ 
         courses,
+        authenticatedUser,
         actions: {
-            fetchData: fetchData
+            fetchData: fetchData,
+            signIn: signIn,
+            signOut: signOut
         }
         }}>
         { props.children }
