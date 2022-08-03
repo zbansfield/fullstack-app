@@ -23,7 +23,7 @@ export default ({context}) => {
                 </form>
                 <p>
                 Don't have a user account? Click here to{" "}
-                <a href="sign-up">sign up</a>!
+                <a href="signup">sign up</a>!
                 </p>
             </div>
         </main>
