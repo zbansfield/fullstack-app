@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 export default ({context}) => {
 
@@ -17,7 +17,7 @@ export default ({context}) => {
                         </a>
                     ))
                 }
-                <a className="course--module course--add--module" href="newcourse">
+                <a className="course--module course--add--module" href="new-course">
                     <span className="course--add--title">
                         <svg
                         version="1.1"
