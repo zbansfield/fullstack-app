@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Buffer } from "buffer";
 
 export default ({context}) => {
     const navigate = useNavigate();
+    const [errors, setErrors] = useState(null);
+
+    useEffect(()=>{
+        context.actions.getValidationErrors(errors);
+    }, [errors])
 
     let handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,20 +25,43 @@ export default ({context}) => {
                 headers: {
                     'Authorization': `Basic ${encodedCredentials}`
                 }
+            })
+            .then(res => {
+                if (res) {
+                    navigate('/');
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                  // The request was made and the server responded with a status code
+                  // that falls out of the range of 2xx
+                  console.log(error.response.data.errors);
+                  setErrors(error.response.data.errors);
+                } 
             });
-            if (res.status === 200) {
-                console.log('Course created successfully')
-            } 
         } catch (err) {
             console.log(err);
         }
-        navigate('/');
+        
     };
 
     return (
         <main>
             <div className="wrap">
                 <h2>Create Course</h2>
+                {
+                    context.validationErrors ? 
+                        <div className="validation--errors">
+                            <h3>Validation Errors</h3>
+                            <ul>
+                                {context.validationErrors.map(error => (
+                                    <li key={error}>{error}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    : <></>
+                }
+                
                 <form onSubmit={handleSubmit}>
                     <div className="main--flex">
                         <div>

@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default ({context}) => {
-
     const navigate = useNavigate();
+    const [errors, setErrors] = useState(null);
+
+    useEffect(()=>{
+        context.actions.getValidationErrors(errors);
+    }, [errors])
 
     let handleSubmit = async (e) => {
         e.preventDefault();
@@ -14,21 +18,42 @@ export default ({context}) => {
                 lastName: e.target[1].value,
                 emailAddress: e.target[2].value,
                 password: e.target[3].value,
+            })
+            .then(res => {
+                if (res) {
+                    navigate('/');
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                  // The request was made and the server responded with a status code
+                  // that falls out of the range of 2xx
+                  console.log(error.response.data.errors);
+                  setErrors(error.response.data.errors);
+                } 
             });
-            if (res.status === 200) {
-                console.log('Account created successfully')
-            } 
         } catch (err) {
             console.log(err);
         }
         context.actions.signIn(e.target[2].value, e.target[3].value);
-        navigate('/');
     };
 
     return (
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>
+                {
+                    context.validationErrors ? 
+                        <div className="validation--errors">
+                            <h3>Validation Errors</h3>
+                            <ul>
+                                {context.validationErrors.map(error => (
+                                    <li key={error}>{error}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    : <></>
+                }
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="firstName">First Name</label>
                     <input id="firstName" name="firstName" type="text" defaultValue="" />

@@ -10,6 +10,7 @@ export const Provider = (props) => {
     const cookie = Cookies.get('authenticatedUser');
     const [authenticatedUser, setAuthenticatedUser] = useState(cookie ? JSON.parse(cookie) : null);
     const data = new Data();
+    const [validationErrors, setValidationErrors] = useState(null);
 
     const fetchData = () => {
         fetch("http://localhost:5000/api/courses")
@@ -37,14 +38,20 @@ export const Provider = (props) => {
         Cookies.remove('authenticatedUser');
     }
 
+    const getValidationErrors = (errors) => {
+        setValidationErrors(errors);
+    }
+
     return (
         <Context.Provider value={{ 
         courses,
         authenticatedUser,
+        validationErrors,
         actions: {
             fetchData: fetchData,
             signIn: signIn,
-            signOut: signOut
+            signOut: signOut,
+            getValidationErrors: getValidationErrors
         }
         }}>
         { props.children }
