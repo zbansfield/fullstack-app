@@ -2,6 +2,7 @@ import React, { useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import { Buffer } from "buffer";
+import ReactMarkdown from 'react-markdown';
 
 export default ({context}) => {
     const { id } = useParams();
@@ -69,9 +70,9 @@ export default ({context}) => {
                                     <h3 className="course--detail--title">Course</h3>
                                     <h4 className="course--name">{context.courses.find((course) => course.id == id).title}</h4>
                                     <p>{`By ${context.courses.find((course) => course.id == id).user.firstName} ${context.courses.find((course) => course.id == id).user.lastName}`}</p>
-                                    <p>
+                                    <ReactMarkdown>
                                         {context.courses.find((course) => course.id == id).description}
-                                    </p>
+                                    </ReactMarkdown>
                                 </div>
                                 <div>
                                     {
@@ -84,13 +85,9 @@ export default ({context}) => {
                                         context.courses.find((course) => course.id == id).materialsNeeded ?
                                         <><h3 className="course--detail--title">Materials Needed</h3>
                                         <ul className="course--detail--list">
-                                            {
-                                                context.courses.find((course) => course.id == id).materialsNeeded.split("*").map(material => (
-                                                    material.length !== 0 ?
-                                                    <li key={material} >{material}</li> 
-                                                    : material
-                                                ))
-                                            }
+                                            <ReactMarkdown>
+                                                {context.courses.find((course) => course.id == id).materialsNeeded}
+                                            </ReactMarkdown>
                                         </ul></>
                                         : <></>
                                     }    
