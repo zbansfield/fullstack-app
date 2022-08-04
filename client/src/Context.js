@@ -5,13 +5,13 @@ import Data from './Data';
 export const Context = React.createContext()
 
 export const Provider = (props) => {
+    const data = new Data();
+    const cookie = Cookies.get('authenticatedUser');
 
     const [courses, setCourses] = useState([]);
     const [authenticatedUser, setAuthenticatedUser] = useState(cookie ? JSON.parse(cookie) : null);
     const [validationErrors, setValidationErrors] = useState(null);
 
-    const data = new Data();
-    const cookie = Cookies.get('authenticatedUser');
 
     // ----------------------------------------
     //         Helper Functions
