@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Buffer } from "buffer";
@@ -7,44 +7,27 @@ export default ({context}) => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [estimatedTime, setEstimatedTime] = useState("");
-    const [materialsNeeded, setMaterialsNeeded] = useState("");
-
     useEffect(() => {
-        async function fetchData() {
-            await context.actions.fetchData();
-            setTitle(context.courses[id - 1].title);
-            setDescription(context.courses[id - 1].description)
-            setEstimatedTime(context.courses[id - 1].estimatedTime)
-            setMaterialsNeeded(context.courses[id - 1].materialsNeeded)
-        }
-        fetchData();
+        context.actions.fetchData();
     }, [])
-
 
     let handleSubmit = async (e) => {
         e.preventDefault();
         const encodedCredentials = Buffer.from(`${context.authenticatedUser.emailAddress}:${context.authenticatedUser.password}`).toString("base64");
         try {
             let res = await axios.put(`http://localhost:5000/api/courses/${id}`, {
-                title: title,
-                description: description,
-                estimatedTime: estimatedTime,
-                materialsNeeded: materialsNeeded,
+                title: e.target[0].value,
+                description: e.target[1].value,
+                estimatedTime: e.target[2].value,
+                materialsNeeded: e.target[3].value,
                 userId: context.authenticatedUser.id,
             }, {
                 headers: {
                     'Authorization': `Basic ${encodedCredentials}`
                 }
             });
-            let resJson = await res.json();
             if (res.status === 200) {
-                setTitle("");
-                setDescription("");
-                setEstimatedTime("");
-                setMaterialsNeeded("");
+                console.log('Updated successfully')
             } 
         } catch (err) {
             console.log(err);
@@ -59,23 +42,21 @@ export default ({context}) => {
                 <form onSubmit={handleSubmit}>
                     <div className="main--flex">
                         {
-                            (context.courses[id - 1]) ? 
+                            (context.courses.find((course) => course.id == id)) ? 
                             <><div>
                                     <label htmlFor="courseTitle">Course Title</label>
                                     <input
                                         id="courseTitle"
                                         name="courseTitle"
                                         type="text"
-                                        defaultValue={context.courses[id - 1].title} 
-                                        onChange={(e) => setTitle(e.target.value)}
+                                        defaultValue={context.courses.find((course) => course.id == id).title} 
                                     />
-                                    <p>{`By ${context.courses[id - 1].user.firstName} ${context.courses[id - 1].user.lastName}`}</p>
+                                    <p>{`By ${context.courses.find((course) => course.id == id).user.firstName} ${context.courses.find((course) => course.id == id).user.lastName}`}</p>
                                     <label htmlFor="courseDescription">Course Description</label>
                                     <textarea
                                         id="courseDescription"
                                         name="courseDescription"
-                                        defaultValue={context.courses[id - 1].description} 
-                                        onChange={(e) => setDescription(e.target.value)}
+                                        defaultValue={context.courses.find((course) => course.id == id).description} 
                                         />
                                 </div>
                                 <div>
@@ -84,15 +65,13 @@ export default ({context}) => {
                                         id="estimatedTime"
                                         name="estimatedTime"
                                         type="text"
-                                        defaultValue={context.courses[id - 1].estimatedTime}
-                                        onChange={(e) => setEstimatedTime(e.target.value)} 
+                                        defaultValue={context.courses.find((course) => course.id == id).estimatedTime}
                                         />
                                     <label htmlFor="materialsNeeded">Materials Needed</label>
                                     <textarea
                                         id="materialsNeeded"
                                         name="materialsNeeded"
-                                        defaultValue={context.courses[id - 1].materialsNeeded}
-                                        onChange={(e) => setMaterialsNeeded(e.target.value)}
+                                        defaultValue={context.courses.find((course) => course.id == id).materialsNeeded}
                                         />
                                 </div></>
                                 : <></>

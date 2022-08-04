@@ -6,32 +6,23 @@ import { Buffer } from "buffer";
 export default ({context}) => {
     const navigate = useNavigate();
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [estimatedTime, setEstimatedTime] = useState("");
-    const [materialsNeeded, setMaterialsNeeded] = useState("");
-
     let handleSubmit = async (e) => {
         e.preventDefault();
         const encodedCredentials = Buffer.from(`${context.authenticatedUser.emailAddress}:${context.authenticatedUser.password}`).toString("base64");
         try {
             let res = await axios.post(`http://localhost:5000/api/courses/`, {
-                title: title,
-                description: description,
-                estimatedTime: estimatedTime,
-                materialsNeeded: materialsNeeded,
+                title: e.target[0].value,
+                description: e.target[1].value,
+                estimatedTime: e.target[2].value,
+                materialsNeeded: e.target[3].value,
                 userId: context.authenticatedUser.id,
             }, {
                 headers: {
                     'Authorization': `Basic ${encodedCredentials}`
                 }
             });
-            let resJson = await res.json();
             if (res.status === 200) {
-                setTitle("");
-                setDescription("");
-                setEstimatedTime("");
-                setMaterialsNeeded("");
+                console.log('Course created successfully')
             } 
         } catch (err) {
             console.log(err);
@@ -52,7 +43,6 @@ export default ({context}) => {
                                 name="courseTitle"
                                 type="text"
                                 defaultValue=""
-                                onChange={(e) => setTitle(e.target.value)}
                             />
                             <p>{`By ${context.authenticatedUser.firstName} ${context.authenticatedUser.lastName}`}</p>
                             <label htmlFor="courseDescription">Course Description</label>
@@ -60,7 +50,6 @@ export default ({context}) => {
                                 id="courseDescription"
                                 name="courseDescription"
                                 defaultValue={""}
-                                onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
                         <div>
@@ -70,14 +59,12 @@ export default ({context}) => {
                                 name="estimatedTime"
                                 type="text"
                                 defaultValue=""
-                                onChange={(e) => setEstimatedTime(e.target.value)}
                             />
                             <label htmlFor="materialsNeeded">Materials Needed</label>
                             <textarea
                                 id="materialsNeeded"
                                 name="materialsNeeded"
                                 defaultValue={""}
-                                onChange={(e) => setMaterialsNeeded(e.target.value)}
                             />
                         </div>
                     </div>

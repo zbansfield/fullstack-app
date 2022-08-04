@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import { Buffer } from "buffer";
 
 export default ({context}) => {
     const { id } = useParams();
-    // const [status, setStatus] = useState(false)
-    let status = false;
 
     useEffect(() => {
-        context.actions.fetchData()
+        async function fetchData() {
+            await context.actions.fetchData()
+        }
+        fetchData();
     }, [])
 
     // Function for sending a delete request
@@ -30,20 +31,23 @@ export default ({context}) => {
         <main>
             <div className="actions--bar">
                 {
-                    (context.courses[id - 1]) ?
+                    (context.courses.find((course) => course.id == id)) ?
                     <>
                     <div className="wrap">
                         {
-                            context.authenticatedUser.emailAddress === context.courses[id - 1].user.emailAddress ? 
-                            <><a className="button" href={`/courses/${id}/update`}>
-                                Update Course
-                            </a>
-                            <a className="button" href="/" onClick={deleteCourseHandler}>
-                                Delete Course
-                            </a></>
-                            :
-                            <></>
+                            context.authenticatedUser ?
+                                context.authenticatedUser.emailAddress === context.courses.find((course) => course.id == id).user.emailAddress ? 
+                                <><a className="button" href={`/courses/${id}/update`}>
+                                    Update Course
+                                </a>
+                                <a className="button" href="/" onClick={deleteCourseHandler}>
+                                    Delete Course
+                                </a></>
+                                :
+                                <></>
+                        : <></>
                         }
+                        
                         
                         <a className="button button-secondary" href="/">
                             Return to List
@@ -60,28 +64,28 @@ export default ({context}) => {
                 <form>
                     <div className="main--flex">
                         {
-                            (context.courses[id - 1]) ? 
+                            (context.courses.find((course) => course.id == id)) ? 
                                 <><div>
                                     <h3 className="course--detail--title">Course</h3>
-                                    <h4 className="course--name">{context.courses[id - 1].title}</h4>
-                                    <p>{`By ${context.courses[id - 1].user.firstName} ${context.courses[id - 1].user.lastName}`}</p>
+                                    <h4 className="course--name">{context.courses.find((course) => course.id == id).title}</h4>
+                                    <p>{`By ${context.courses.find((course) => course.id == id).user.firstName} ${context.courses.find((course) => course.id == id).user.lastName}`}</p>
                                     <p>
-                                        {context.courses[id - 1].description}
+                                        {context.courses.find((course) => course.id == id).description}
                                     </p>
                                 </div>
                                 <div>
                                     {
-                                        context.courses[id - 1].estimatedTime ?
+                                        context.courses.find((course) => course.id == id).estimatedTime ?
                                         <><h3 className="course--detail--title">Estimated Time</h3>
-                                        <p>{context.courses[id - 1].estimatedTime}</p></>
+                                        <p>{context.courses.find((course) => course.id == id).estimatedTime}</p></>
                                         : <></>
                                     }
                                     {
-                                        context.courses[id - 1].materialsNeeded ?
+                                        context.courses.find((course) => course.id == id).materialsNeeded ?
                                         <><h3 className="course--detail--title">Materials Needed</h3>
                                         <ul className="course--detail--list">
                                             {
-                                                context.courses[id - 1].materialsNeeded.split("*").map(material => (
+                                                context.courses.find((course) => course.id == id).materialsNeeded.split("*").map(material => (
                                                     material.length !== 0 ?
                                                     <li key={material} >{material}</li> 
                                                     : material

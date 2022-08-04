@@ -1,15 +1,35 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default ({context}) => {
 
     const navigate = useNavigate();
 
+    let handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            let res = await axios.post(`http://localhost:5000/api/users`, {
+                firstName: e.target[0].value,
+                lastName: e.target[1].value,
+                emailAddress: e.target[2].value,
+                password: e.target[3].value,
+            });
+            if (res.status === 200) {
+                console.log('Account created successfully')
+            } 
+        } catch (err) {
+            console.log(err);
+        }
+        context.actions.signIn(e.target[2].value, e.target[3].value);
+        navigate('/');
+    };
+
     return (
         <main>
             <div className="form--centered">
                 <h2>Sign Up</h2>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <label htmlFor="firstName">First Name</label>
                     <input id="firstName" name="firstName" type="text" defaultValue="" />
                     <label htmlFor="lastName">Last Name</label>
