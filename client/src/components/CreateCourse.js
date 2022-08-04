@@ -7,15 +7,22 @@ export default ({context}) => {
     const navigate = useNavigate();
     const [errors, setErrors] = useState(null);
 
+    // Calling getValidation function from Context to update the validation errors if they are recieved from the API
     useEffect(()=>{
         context.actions.getValidationErrors(errors);
     }, [errors])
 
+    /** Handling form submission
+     * sends post request with basic authentication to the Rest API to create a new course
+     * navigates back to the home '/' route if the post request goes through
+     * if the API sends validation errors the errors state is updated 
+     * @param {*} e 
+     */
     let handleSubmit = async (e) => {
         e.preventDefault();
         const encodedCredentials = Buffer.from(`${context.authenticatedUser.emailAddress}:${context.authenticatedUser.password}`).toString("base64");
         try {
-            let res = await axios.post(`http://localhost:5000/api/courses/`, {
+            await axios.post(`http://localhost:5000/api/courses/`, {
                 title: e.target[0].value,
                 description: e.target[1].value,
                 estimatedTime: e.target[2].value,
@@ -33,9 +40,6 @@ export default ({context}) => {
             })
             .catch(function (error) {
                 if (error.response) {
-                  // The request was made and the server responded with a status code
-                  // that falls out of the range of 2xx
-                  console.log(error.response.data.errors);
                   setErrors(error.response.data.errors);
                 } 
             });

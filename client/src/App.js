@@ -17,6 +17,7 @@ import UserSignOut from './components/UserSignOut';
 import withContext from './Context';
 import PrivateRoute from './PrivateRoute';
 
+// Connecting components to Context
 const HeaderWithContext = withContext(Header);
 const CoursesWithContext = withContext(Courses);
 const CourseDetailWithContext = withContext(CourseDetail);
@@ -38,6 +39,9 @@ function App() {
           <Route path='/courses/:id' element={<CourseDetailWithContext/>} />
           <Route path='/signin' element={<UserSignInWtihContext/>} />
           <Route path='/signup' element={<UserSignUpWtihContext/>} />
+          <Route path='/signout' element={<UserSignOutWithContext/>} />
+
+          {/* Protected routes  */}
           <Route 
             path='/courses/create' 
             element={
@@ -54,7 +58,6 @@ function App() {
               </PrivateRoute>
             } 
           />
-          <Route path='/signout' element={<UserSignOutWithContext/>} />
         </Routes>
       </Router>
     </div>

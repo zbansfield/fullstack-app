@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import { Buffer } from "buffer";
@@ -7,14 +7,13 @@ import ReactMarkdown from 'react-markdown';
 export default ({context}) => {
     const { id } = useParams();
 
+    // Calling fetchData function from Context to fetch courses
     useEffect(() => {
-        async function fetchData() {
-            await context.actions.fetchData()
-        }
-        fetchData();
+        context.actions.fetchData()
     }, [])
 
-    // Function for sending a delete request
+    // Handling sending a delete request to the Rest API
+    // Using basic authentication to authenticate user for delete reqeust
     const deleteCourseHandler = () => {
         const encodedCredentials = Buffer.from(`${context.authenticatedUser.emailAddress}:${context.authenticatedUser.password}`).toString("base64");
         

@@ -7,6 +7,10 @@ export default ({context}) => {
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
 
+    /** Handles form submission 
+     * calls signIn() function from Context
+     * navigates back to the home '/' route
+    */
     const handleSubmit = (e) => {
         e.preventDefault();  
         context.actions.signIn(emailAddress, password);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 import Data from './Data';
 
@@ -7,11 +7,17 @@ export const Context = React.createContext()
 export const Provider = (props) => {
 
     const [courses, setCourses] = useState([]);
-    const cookie = Cookies.get('authenticatedUser');
     const [authenticatedUser, setAuthenticatedUser] = useState(cookie ? JSON.parse(cookie) : null);
-    const data = new Data();
     const [validationErrors, setValidationErrors] = useState(null);
 
+    const data = new Data();
+    const cookie = Cookies.get('authenticatedUser');
+
+    // ----------------------------------------
+    //         Helper Functions
+    // ----------------------------------------
+
+    // Fetching the course data and updating the courses state
     const fetchData = () => {
         fetch("http://localhost:5000/api/courses")
         .then(res => res.json())
@@ -20,6 +26,10 @@ export const Provider = (props) => {
             })
     }
 
+    /** Handling user sign in authentication
+     * calls getUser() from Data.js to get the user's data 
+     * updates the cookies so the user stays signed in with page refreshes 
+    */ 
     const signIn = async (emailAddress, password) => {
         const user = await data.getUser(emailAddress, password);
         user.password = password;
@@ -33,11 +43,18 @@ export const Provider = (props) => {
         return user;
     }
 
+    /** Handling user sign out
+     * resets authenticated user to null 
+     * removes the cookies 
+    */ 
     const signOut = async () => {
         setAuthenticatedUser(null)
         Cookies.remove('authenticatedUser');
     }
 
+    /** Handling validation errors 
+     * updates validationErrors state with the errors sent from the API
+    */ 
     const getValidationErrors = (errors) => {
         setValidationErrors(errors);
     }
