@@ -15,6 +15,8 @@ import UpdateCourse from './components/UpdateCourse';
 import UserSignOut from './components/UserSignOut';
 
 import withContext from './Context';
+import PrivateRoute from './PrivateRoute';
+
 const HeaderWithContext = withContext(Header);
 const CoursesWithContext = withContext(Courses);
 const CourseDetailWithContext = withContext(CourseDetail);
@@ -36,8 +38,22 @@ function App() {
           <Route path='/courses/:id' element={<CourseDetailWithContext/>} />
           <Route path='/signin' element={<UserSignInWtihContext/>} />
           <Route path='/signup' element={<UserSignUpWtihContext/>} />
-          <Route path='/courses/create' element={<CreateCourseWithContext/>} />
-          <Route path='/courses/:id/update' element={<UpdateCourseWithContext/>} />
+          <Route 
+            path='/courses/create' 
+            element={
+              <PrivateRoute>
+                <CreateCourseWithContext/>
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path='/courses/:id/update' 
+            element={
+              <PrivateRoute>
+                <UpdateCourseWithContext/>
+              </PrivateRoute>
+            } 
+          />
           <Route path='/signout' element={<UserSignOutWithContext/>} />
         </Routes>
       </Router>

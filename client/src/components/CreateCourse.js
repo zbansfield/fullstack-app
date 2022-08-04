@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Buffer } from "buffer";
 
 export default ({context}) => {
     const navigate = useNavigate();
@@ -12,13 +13,18 @@ export default ({context}) => {
 
     let handleSubmit = async (e) => {
         e.preventDefault();
+        const encodedCredentials = Buffer.from(`${context.authenticatedUser.emailAddress}:${context.authenticatedUser.password}`).toString("base64");
         try {
             let res = await axios.post(`http://localhost:5000/api/courses/`, {
                 title: title,
                 description: description,
                 estimatedTime: estimatedTime,
                 materialsNeeded: materialsNeeded,
-                userId: context.user.id
+                userId: context.authenticatedUser.id,
+            }, {
+                headers: {
+                    'Authorization': `Basic ${encodedCredentials}`
+                }
             });
             let resJson = await res.json();
             if (res.status === 200) {
@@ -30,6 +36,7 @@ export default ({context}) => {
         } catch (err) {
             console.log(err);
         }
+        navigate('/');
     };
 
     return (

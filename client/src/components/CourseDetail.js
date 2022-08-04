@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
+import { Buffer } from "buffer";
 
 export default ({context}) => {
     const { id } = useParams();
@@ -12,8 +13,14 @@ export default ({context}) => {
     }, [])
 
     // Function for sending a delete request
-    const deletePostHandler = () => {
-        axios.delete('http://localhost:5000/api/courses/' + id)
+    const deleteCourseHandler = () => {
+        const encodedCredentials = Buffer.from(`${context.authenticatedUser.emailAddress}:${context.authenticatedUser.password}`).toString("base64");
+        
+        axios.delete('http://localhost:5000/api/courses/' + id, {
+            headers: {
+                'Authorization': `Basic ${encodedCredentials}`
+            }
+        })
             .then(response => {
                 console.log(response);
             });
@@ -22,17 +29,31 @@ export default ({context}) => {
     return (
         <main>
             <div className="actions--bar">
-                <div className="wrap">
-                    <a className="button" href={`/courses/${id}/update`}>
-                        Update Course
-                    </a>
-                    <a className="button" href="/" onClick={deletePostHandler}>
-                        Delete Course
-                    </a>
-                    <a className="button button-secondary" href="/">
-                        Return to List
-                    </a>
-                </div>
+                {
+                    (context.courses[id - 1]) ?
+                    <>
+                    <div className="wrap">
+                        {
+                            context.authenticatedUser.emailAddress === context.courses[id - 1].user.emailAddress ? 
+                            <><a className="button" href={`/courses/${id}/update`}>
+                                Update Course
+                            </a>
+                            <a className="button" href="/" onClick={deleteCourseHandler}>
+                                Delete Course
+                            </a></>
+                            :
+                            <></>
+                        }
+                        
+                        <a className="button button-secondary" href="/">
+                            Return to List
+                        </a>
+                    </div>
+                    </>
+                    :
+                    <></>
+                }
+                
             </div>
             <div className="wrap">
                 <h2>Course Detail</h2>

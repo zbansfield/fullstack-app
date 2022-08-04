@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Buffer } from "buffer";
 
 export default class Data {
