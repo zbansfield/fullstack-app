@@ -29,6 +29,7 @@ export default ({context}) => {
             })
             .then(res => {
                 if (res) {
+                    context.actions.signIn(e.target[2].value, e.target[3].value);
                     navigate('/');
                 }
             })
@@ -40,7 +41,6 @@ export default ({context}) => {
         } catch (err) {
             console.log(err);
         }
-        context.actions.signIn(e.target[2].value, e.target[3].value);
     };
 
     return (
