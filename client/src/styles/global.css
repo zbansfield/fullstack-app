@@ -6,7 +6,7 @@ html {
     font-size: 1.25em;
 }
 body {
-    font-family: 'Work Sans', sans-serif;
+    font-family: Georgia, serif;
 }
 h2 {
     font-size: 1.5rem;
@@ -20,7 +20,7 @@ p {
     hyphens: auto;
 }
 a {
-    color: #939;
+    color: #fde19f;
     text-decoration: none;
 }
 .wrap {
@@ -29,7 +29,7 @@ a {
     padding: 0 1rem;
 }
 header {
-    background: pink;
+    background: #789395;
     color: #fff;
     padding: 1rem 0;
     margin-bottom: 2rem;
@@ -41,13 +41,13 @@ header {
 }
 .header--logo a {
     font-size: 1.25rem;
-    color: #fff;
+    color: #E5E3C9;
 }
 header li {
     font-size: .8rem;
 }
 header nav a {
-    color: #dbd;
+    color: #E5E3C9;
 }
 header nav a:hover {
     color: #fff;
@@ -62,26 +62,26 @@ header nav a:hover {
     margin-left: .5rem;
 }
 .course--module {
-    background: #7c689b;
+    background: #94B49F;
     border-radius: .5rem;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     display: block;
 }
 .course--label {
-    color: #fff;
+    color: #534340;
     font-size: .9rem;
     font-weight: 400;
     margin-bottom: .25rem;
 }
 .course--title {
-    color: #fff;
+    color: #534340;
     font-weight: 700;
     font-size: 1.25rem;
 }
 .course--add--module {
-    background: #ddd9e4;
-    color: #57496e;
+    background: #E5E3C9;
+    color: #534340;
     font-weight: 300;
     font-size: 1.25rem;
 }
@@ -104,7 +104,7 @@ header nav a:hover {
     font-size: 2rem;
     margin-bottom: .5rem;
     font-weight: 700;
-    color: #47395e;
+    color: #534340;
 }
 .course--detail--list {
     font-weight: 300;
@@ -112,7 +112,7 @@ header nav a:hover {
     line-height: 1.5;
 }
 .actions--bar {
-    background: #e9e5f0;
+    background: #B4CFB0;
     padding: 1rem 0;
     margin: -2rem 0 2rem;
 }
@@ -157,18 +157,18 @@ input, textarea {
     width: 100%;
     color: #332a40;
     border-radius: .5rem;
-    border: 1px solid #8c789b;
+    border: 1px solid #534340;
     padding: .5rem;
     margin-bottom: 1rem;
-    font-family: 'Work Sans', sans-serif;
+    font-family: Georgia, serif;
     font-size: .8rem;
 }
 textarea {
     min-height: 300px;
 }
 .button {
-    background: #7c689b;
-    color: #fff;
+    background: #534340;
+    color: #E5E3C9;
     font-size: 1rem;
     padding: .75rem 1.5rem;
     border: 0;
@@ -178,30 +178,31 @@ textarea {
     text-align: center;
     border-radius: .5rem;
     font-weight: bold;
+    font-family: Georgia, serif;
     transition: background 0.2s;
 }
 .button:last-child {
     margin-bottom: 0;
 }
 .button:not(.button-secondary):hover {
-    background: #63537d;
+    background: #1C0A00;
     cursor: pointer;
 }
 .button-secondary {
-    color: #7c689b;
+    color: #534340;
     background: none;
-    box-shadow: 0 0 0 2px #7c689b inset;
+    box-shadow: 0 0 0 2px #534340 inset;
     transition: box-shadow 0.2s, color 0.2s;
 }
 .button-secondary:hover {
-    color: #63537d;
-    box-shadow: 0 0 0 2px #63537d inset;
+    color: #1C0A00;
+    box-shadow: 0 0 0 2px #1C0A00 inset;
     cursor: pointer;
 }
 input:focus, button:focus, .button:focus, textarea:focus {
     border: none;
     border-radius: 0;
-    outline: 2px solid #332a40;
+    outline: 2px solid #1C0A00;
 }
 
 @media screen and (min-width: 600px) {
