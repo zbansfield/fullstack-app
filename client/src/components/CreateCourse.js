@@ -41,6 +41,9 @@ export default ({context}) => {
             .catch(function (error) {
                 if (error.response) {
                   setErrors(error.response.data.errors);
+                  if (error.response.status === 500) {
+                    navigate('/error')
+                  }
                 } 
             });
         } catch (err) {

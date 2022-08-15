@@ -1,14 +1,20 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default ({context}) => {
+    const navigate = useNavigate();
 
     // Calling fetchData function from Context to fetch courses
     useEffect(() => {
-        context.actions.fetchData()
+        context.actions.fetchData();
     }, [])
 
     return(
         <main>
+        {
+            context.internalError ? 
+            navigate('/error')
+            :
             <div className="wrap main--grid">
                 {
                     context.courses.map(course => (
@@ -34,6 +40,7 @@ export default ({context}) => {
                     </span>
                 </a>
             </div>
+        }
         </main>
     )
 }

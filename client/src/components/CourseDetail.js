@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { Buffer } from "buffer";
 import ReactMarkdown from 'react-markdown';
 
 export default ({context}) => {
     const { id } = useParams();
+    const navigate = useNavigate();
 
     // Calling fetchData function from Context to fetch courses
     useEffect(() => {
-        context.actions.fetchData()
+        context.actions.fetchData();
     }, [])
 
     // Handling sending a delete request to the Rest API
@@ -24,6 +25,13 @@ export default ({context}) => {
         })
             .then(response => {
                 console.log(response);
+            })
+            .catch(error => {
+                if (error.response) {
+                    if (error.response.status === 500) {
+                        navigate('/error')
+                      }
+                }
             });
     }
 
@@ -91,7 +99,7 @@ export default ({context}) => {
                                         : <></>
                                     }    
                                 </div></>
-                            : <h3>..Loading</h3> 
+                            : navigate('/notfound') 
                         }
                     </div>
                 </form>

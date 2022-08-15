@@ -2,6 +2,7 @@ import React from 'react';
 import { 
   Route, 
   Routes,
+  Navigate,
   BrowserRouter as Router 
 } from 'react-router-dom';
 
@@ -13,6 +14,9 @@ import UserSignUp from './components/UserSignUp';
 import CreateCourse from './components/CreateCourse';
 import UpdateCourse from './components/UpdateCourse';
 import UserSignOut from './components/UserSignOut';
+import NotFound from './components/NotFound';
+import Forbidden from './components/Forbidden';
+import UnhandledError from './components/UnhandledError';
 
 import withContext from './Context';
 import PrivateRoute from './PrivateRoute';
@@ -40,6 +44,9 @@ function App() {
           <Route path='/signin' element={<UserSignInWtihContext/>} />
           <Route path='/signup' element={<UserSignUpWtihContext/>} />
           <Route path='/signout' element={<UserSignOutWithContext/>} />
+          <Route path='/notfound' element={<NotFound/>} />
+          <Route path='/forbidden' element={<Forbidden/>} />
+          <Route path='/error' element={<UnhandledError/>} />
 
           {/* Protected routes  */}
           <Route 
@@ -58,6 +65,7 @@ function App() {
               </PrivateRoute>
             } 
           />
+         <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </div>

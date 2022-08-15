@@ -26,32 +26,40 @@ export default ({context}) => {
      */
     let handleSubmit = async (e) => {
         e.preventDefault();
-        const encodedCredentials = Buffer.from(`${context.authenticatedUser.emailAddress}:${context.authenticatedUser.password}`).toString("base64");
-        try {
-            await axios.put(`http://localhost:5000/api/courses/${id}`, {
-                title: e.target[0].value,
-                description: e.target[1].value,
-                estimatedTime: e.target[2].value,
-                materialsNeeded: e.target[3].value,
-                userId: context.authenticatedUser.id,
-            }, {
-                headers: {
-                    'Authorization': `Basic ${encodedCredentials}`
-                }
-            })
-            .then(res => {
-                if (res) {
-                    navigate(`/courses/${id}`);
-                }
-            })
-            .catch(function (error) {
-                if (error.response) {
-                  setErrors(error.response.data.errors);
-                } 
-            });
-        } catch (err) {
-            console.log(err);
+        if (context.courses.find((course) => course.id == id).user.firstName === context.authenticatedUser.firstName) {
+            const encodedCredentials = Buffer.from(`${context.authenticatedUser.emailAddress}:${context.authenticatedUser.password}`).toString("base64");
+            try {
+                await axios.put(`http://localhost:5000/api/courses/${id}`, {
+                    title: e.target[0].value,
+                    description: e.target[1].value,
+                    estimatedTime: e.target[2].value,
+                    materialsNeeded: e.target[3].value,
+                    userId: context.authenticatedUser.id,
+                }, {
+                    headers: {
+                        'Authorization': `Basic ${encodedCredentials}`
+                    }
+                })
+                .then(res => {
+                    if (res) {
+                        navigate(`/courses/${id}`);
+                    }
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                      setErrors(error.response.data.errors);
+                      if (error.response.status === 500) {
+                        navigate('/error')
+                      }
+                    } 
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            navigate('/forbidden');
         }
+        
     };
 
     return(
@@ -105,7 +113,7 @@ export default ({context}) => {
                                         defaultValue={context.courses.find((course) => course.id == id).materialsNeeded}
                                         />
                                 </div></>
-                                : <></>
+                                : navigate('/notfound')
                         }
                         
                     </div>

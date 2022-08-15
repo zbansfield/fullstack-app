@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 import Data from './Data';
+import { constants } from 'buffer';
+import axios from 'axios';
 
 export const Context = React.createContext()
 
@@ -11,6 +13,7 @@ export const Provider = (props) => {
     const [courses, setCourses] = useState([]);
     const [authenticatedUser, setAuthenticatedUser] = useState(cookie ? JSON.parse(cookie) : null);
     const [validationErrors, setValidationErrors] = useState(null);
+    const [internalError, setInternalError] = useState(null);
 
 
     // ----------------------------------------
@@ -19,11 +22,14 @@ export const Provider = (props) => {
 
     // Fetching the course data and updating the courses state
     const fetchData = () => {
-        fetch("http://localhost:5000/api/courses")
-        .then(res => res.json())
-        .then((data) => {
-                setCourses(data);
-            })
+        axios.get("http://localhost:5000/api/courses")
+        .then(res => {
+            setCourses(res.data)
+        })
+        .catch(error => {
+            console.log(error);
+            setInternalError(error.response.status);
+        })
     }
 
     /** Handling user sign in authentication
@@ -40,6 +46,9 @@ export const Provider = (props) => {
             };
             Cookies.set('authenticatedUser', JSON.stringify(user), cookieOptions);
         }
+        if (user.status) {
+            setInternalError(user.status);
+        }
         return user;
     }
 
@@ -48,7 +57,7 @@ export const Provider = (props) => {
      * removes the cookies 
     */ 
     const signOut = async () => {
-        setAuthenticatedUser(null)
+        setAuthenticatedUser(null);
         Cookies.remove('authenticatedUser');
     }
 
@@ -64,6 +73,7 @@ export const Provider = (props) => {
         courses,
         authenticatedUser,
         validationErrors,
+        internalError,
         actions: {
             fetchData: fetchData,
             signIn: signIn,

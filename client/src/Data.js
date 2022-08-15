@@ -31,6 +31,13 @@ export default class Data {
     else if (response.status === 401) {
       return null;
     }
+    else if (response.status === 500) {
+      const err = {
+        message: "Internal server error",
+        status: 500
+      }
+      return err
+    }
     else {
       throw new Error();
     }
