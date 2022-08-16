@@ -14,7 +14,7 @@ export default ({context}) => {
     const handleSubmit = (e) => {
         e.preventDefault();  
         context.actions.signIn(emailAddress, password);
-        navigate('/');
+        navigate(-1);
     }
 
     return (
